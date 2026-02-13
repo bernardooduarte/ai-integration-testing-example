@@ -1,0 +1,20 @@
+# Node.js
+node_modules/
+dist/
+.env
+pnpm-debug.log*
+
+# Java / Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+*.class
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
