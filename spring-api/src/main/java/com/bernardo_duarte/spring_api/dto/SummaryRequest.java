@@ -1,4 +1,7 @@
 package com.bernardo_duarte.spring_api.dto;
 
-public record SummaryRequest(String text) {
-}
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record SummaryRequest(
+        @JsonProperty("text") String text
+) {}
