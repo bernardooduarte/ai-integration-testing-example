@@ -1,30 +1,39 @@
 package com.bernardo_duarte.spring_api.service;
 
 import com.bernardo_duarte.spring_api.dto.IaRawResponse;
-import com.bernardo_duarte.spring_api.dto.SummaryRequest;
-import com.bernardo_duarte.spring_api.dto.SummaryResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
+
+import java.util.Map;
 
 @Service
 public class SummaryService {
+
     private final RestClient restClient;
 
-    public SummaryService(RestClient.Builder builder, @Value("${ai.api.url}") String baseUrl) {
+    public SummaryService(RestClient.Builder builder,
+                          @Value("${ai.api.url}") String baseUrl) {
         this.restClient = builder.baseUrl(baseUrl).build();
     }
 
-    public SummaryResponse summarize(String text) {
-        SummaryRequest requestBody = new SummaryRequest(text);
+    public String summarize(String text) {
+        try {
+            Map<String, String> body = Map.of("text", text);
 
-        IaRawResponse response = restClient.post()
-                .uri("/v1/generate")
-                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
-                .body(requestBody)
-                .retrieve()
-                .body(IaRawResponse.class);
+            IaRawResponse response = restClient.post()
+                    .uri("/v1/generate")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(body)
+                    .retrieve()
+                    .body(IaRawResponse.class);
 
-        return new SummaryResponse(true, response.generatedText());
+            return response.generated_text();
+
+        } catch (RestClientException ex) {
+            throw new RuntimeException("Erro ao chamar API de IA", ex);
+        }
     }
 }

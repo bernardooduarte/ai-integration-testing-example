@@ -19,6 +19,7 @@ public class SummaryController {
 
     @PostMapping
     public SummaryResponse handleSummarize(@RequestBody SummaryRequest request) {
-        return summaryService.summarize(request.text());
+        String summary = summaryService.summarize(request.text());
+        return new SummaryResponse(true, summary);
     }
 }
