@@ -16,13 +16,12 @@ public class SummaryService {
     }
 
     public SummaryResponse summarize(String text) {
-        java.util.Map<String, String> bodyMap = java.util.Map.of("text", text);
+        SummaryRequest requestBody = new SummaryRequest(text);
 
         IaRawResponse response = restClient.post()
                 .uri("/v1/generate")
                 .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
-                .accept(org.springframework.http.MediaType.APPLICATION_JSON)
-                .body(bodyMap)
+                .body(requestBody)
                 .retrieve()
                 .body(IaRawResponse.class);
 
